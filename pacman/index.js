@@ -23,7 +23,7 @@ class Player {
   constructor({ position, velocity }) {
     this.position = position;
     this.velocity = velocity;
-    this.radius = 10;
+    this.radius = 15;
   }
 
   draw() {
@@ -32,6 +32,12 @@ class Player {
     c.fillStyle = 'yellow';
     c.fill();
     c.closePath();
+  }
+
+  update() {
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
   }
 }
 
@@ -69,7 +75,31 @@ map.forEach((row, i) => {
   })
 })
 
-boundaries.forEach(boundary => {
+function animate() {
+  requestAnimationFrame(animate);
+  c.clearRect(0, 0, canvas.width, canvas.height)
+  boundaries.forEach(boundary => {
   boundary.draw()
 })
-player.draw()
+player.update();
+}
+
+animate()
+
+addEventListener('keydown', ({key}) => {
+  switch (key) {
+    case 'w':
+    player.velocity.y = -5
+    break
+    case 'a':
+    player.velocity.x = -5
+    break
+    case 's':
+    player.velocity.y = 5
+    break
+    case 'd':
+    player.velocity.x = 5
+    break 
+  }
+  console.log(player.velocity)
+})
