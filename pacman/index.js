@@ -110,11 +110,45 @@ function animate() {
   c.clearRect(0, 0, canvas.width, canvas.height)
 
   if (keys.w.pressed && lastKey === 'w') {
-    player.velocity.y = -5
-  } else if (keys.a.pressed && lastKey === 'a') {
+    for (let i=0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+    if (
+      circleCollidesWithRectangle({
+        circle: {...player, velocity: {
+          x: 0,
+          y: -5
+        }
+      },
+        rectangle: boundary
+      })
+    ) {
+      player.velocity.y = 0
+      break
+    } else {
+      player.velocity.y = -5
+    }
+  }
+} else if (keys.a.pressed && lastKey === 'a') {
     player.velocity.x = -5
   } else if (keys.s.pressed && lastKey === 's') {
-    player.velocity.y = 5
+    for (let i=0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+    if (
+      circleCollidesWithRectangle({
+        circle: {...player, velocity: {
+          x: 0,
+          y: 5
+        }
+      },
+        rectangle: boundary
+      })
+    ) {
+      player.velocity.y = 0
+      break
+    } else {
+      player.velocity.y = 5
+    }
+  }
   } else if (keys.d.pressed && lastKey === 'd') {
     player.velocity.x = 5
   }
@@ -123,12 +157,11 @@ function animate() {
   boundary.draw()
 
   if (
-    player.position.y - player.radius + player.velocity.y
-      <=
-      boundary.position.y + boundary.height && player.position.x + player.radius + player.velocity.x
-      >= boundary.position.x && player.position.y + player.radius + player.velocity.y
-      >= boundary.position.y && player.position.x - player.radius + player.velocity.x
-      <= boundary.position.x + boundary.width) {
+    circleCollidesWithRectangle({
+      circle: player,
+      rectangle: boundary
+    })
+    ) {
     player.velocity.x = 0;
     player.velocity.y = 0;
   }
@@ -179,4 +212,4 @@ addEventListener('keyup', ({key}) => {
   }
 })
 
-//https://www.youtube.com/watch?v=5IMXpp3rohQ @46:08
+//https://www.youtube.com/watch?v=5IMXpp3rohQ @1:09
