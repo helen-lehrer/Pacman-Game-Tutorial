@@ -72,7 +72,9 @@ let lastKey = '';
 const map = [
   ['-', '-', '-', '-', '-', '-', '-'],
   ['-', ' ', ' ', ' ', ' ', ' ', '-'],
-  ['-', ' ', '-', '', '-', ' ', '-'],
+  ['-', ' ', '-', ' ', '-', ' ', '-'],
+  ['-', ' ', ' ', ' ', ' ', ' ', '-'],
+  ['-', ' ', '-', ' ', '-', ' ', '-'],
   ['-', ' ', ' ', ' ', ' ', ' ', '-'],
   ['-', '-', '-', '-', '-', '-', '-']
 ];
@@ -129,7 +131,24 @@ function animate() {
     }
   }
 } else if (keys.a.pressed && lastKey === 'a') {
-    player.velocity.x = -5
+  for (let i=0; i < boundaries.length; i++) {
+    const boundary = boundaries[i];
+    if (
+      circleCollidesWithRectangle({
+        circle: {...player, velocity: {
+          x: -5,
+          y: 0
+        }
+      },
+        rectangle: boundary
+      })
+      ) {
+        player.velocity.x = 0
+        break
+      } else {
+        player.velocity.x = -5
+      }
+    }
   } else if (keys.s.pressed && lastKey === 's') {
     for (let i=0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
@@ -150,7 +169,24 @@ function animate() {
     }
   }
   } else if (keys.d.pressed && lastKey === 'd') {
-    player.velocity.x = 5
+    for (let i=0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        circleCollidesWithRectangle({
+          circle: {...player, velocity: {
+            x: 5,
+            y: 0
+          }
+        },
+          rectangle: boundary
+        })
+        ) {
+          player.velocity.x = 0
+          break
+        } else {
+          player.velocity.x = 5
+        }
+      }
   }
 
   boundaries.forEach((boundary) => {
@@ -212,4 +248,6 @@ addEventListener('keyup', ({key}) => {
   }
 })
 
-//https://www.youtube.com/watch?v=5IMXpp3rohQ @1:09
+//https://www.youtube.com/watch?v=5IMXpp3rohQ 
+//@1:12 - collision detection
+//
